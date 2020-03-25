@@ -1,22 +1,25 @@
 #ifndef _HPARAMS_HPP__
 #define _HPARAMS_HPP__
 
-#pragma once 
+#pragma once
 
 #include<string>
+//#include <filesystem>
+
+
 
 namespace hparams
 {
 	using namespace std;
 
-    static const string base_folder = "/shared1/saurabh.m/waveglow/waveglow_weights/";
+    static const string base_folder = "/home/rocm/program/Waveglow_Inference_in_CUDA/waveglow_weights/";
 
     static const size_t max_length = 1000*32;
 
 	static const size_t mel_dim = 80;
 	static const size_t stride = 256; //for upsampler
 
-	static const size_t n_channels = 256; 
+	static const size_t n_channels = 256;
 	static const size_t n_flows = 12;	//number of flows
 	static const size_t n_layers = 8;	//number of layers in a flow
 	static const size_t n_groups = 8;	//groups in which audio is divided

@@ -9,10 +9,10 @@ OBJ_DIR   = waveglow/obj
 OBJ_DIR_SYS   = sys/obj
 OBJ_DIR_COMMON   = common/obj
 
-INCLUDES:=-Iwaveglow/header/ -Icommon/header -Isys/header
+INCLUDES:=-Iwaveglow/header/ -Icommon/header -Isys/header -I/usr/local/cuda/include
 NVCC:=nvcc
 LDFLAGS:= -lcudnn -lcublas -lcurand
-NVCCFLAGS:= -arch=sm_70 -std=c++11 -O2 #--ptxas-options=-v
+NVCCFLAGS:= -arch=sm_70 -std=c++11   #--compiler-bindir=g++-4.9 #--ptxas-options=-v
 CUDNN_PATH:= /usr/local/cuda/
 LIBS:= -L $(CUDNN_PATH)/lib64 -L/usr/local/lib
 
