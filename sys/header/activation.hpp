@@ -2,7 +2,7 @@
 #define __ACTIVATION_HPP__
 
 #include <data_types.hpp>
-#include <cudnn.h>
+#include <hipDNN.h>
 #include<logger.hpp>
 
 
@@ -16,8 +16,8 @@ namespace livai {
 			class activation
 			{
 			private:
-				cudnnTensorDescriptor_t in_out_descriptor;
-				cudnnActivationDescriptor_t activation_descriptor;
+				hipdnnTensorDescriptor_t in_out_descriptor;
+				hipdnnActivationDescriptor_t activation_descriptor;
 
 			public:
 				noCopy(activation);
@@ -26,30 +26,30 @@ namespace livai {
 				Alloc memory at device and memcopy the parameters ( shared memory )
 				* */
 				void init(size_t in_rows, size_t in_cols, size_t in_channels,
-					size_t batch_size = 1, cudnnActivationMode_t mode = CUDNN_ACTIVATION_RELU)
+					size_t batch_size = 1, hipdnnActivationMode_t mode = HIPDNN_ACTIVATION_RELU)
 				{
-					checkCUDNN(cudnnCreateTensorDescriptor(&in_out_descriptor));
-					checkCUDNN(cudnnSetTensor4dDescriptor(in_out_descriptor,
-                                      /*format=*/CUDNN_TENSOR_NHWC,
-                                      /*dataType=*/CUDNN_DATA_FLOAT,
+					checkCUDNN(hipdnnCreateTensorDescriptor(&in_out_descriptor));
+					checkCUDNN(hipdnnSetTensor4dDescriptor(in_out_descriptor,
+                                      /*format=*/HIPDNN_TENSOR_NHWC,
+                                      /*dataType=*/HIPDNN_DATA_FLOAT,
                                       /*batch_size=*/batch_size,
                                       /*channels=*/in_channels,
                                       /*image_height=*/in_rows,
                                       /*image_width=*/in_cols));
 
-						checkCUDNN(cudnnCreateActivationDescriptor(&activation_descriptor));
-						checkCUDNN(cudnnSetActivationDescriptor(activation_descriptor,
+						checkCUDNN(hipdnnCreateActivationDescriptor(&activation_descriptor));
+						checkCUDNN(hipdnnSetActivationDescriptor(activation_descriptor,
                                         /*mode=*/mode,
-                                        /*reluNanOpt=*/CUDNN_PROPAGATE_NAN,
+                                        /*reluNanOpt=*/HIPDNN_PROPAGATE_NAN,
                                         /*relu_coef=*/0));
 
 					}
 
-					void operator () (cudnnHandle_t& cudnn, gpu_float_array& d_input)
+					void operator () (hipdnnHandle_t& cudnn, gpu_float_array& d_input)
 					{
 						const float alpha = 1, beta = 0;
 					// Perform the forward pass of the activation
-						checkCUDNN(cudnnActivationForward(cudnn,
+						checkCUDNN(hipdnnActivationForward(cudnn,
 							activation_descriptor,
 							&alpha,
 							in_out_descriptor,
@@ -66,11 +66,10 @@ namespace livai {
 				// free host & device memory
 					~activation()
 					{
-						cudnnDestroyTensorDescriptor(in_out_descriptor);
-						cudnnDestroyActivationDescriptor(activation_descriptor);
+						hipdnnDestroyTensorDescriptor(in_out_descriptor);
+						hipdnnDestroyActivationDescriptor(activation_descriptor);
 					}
 				};
 			}
 		}
 	}
-#endif

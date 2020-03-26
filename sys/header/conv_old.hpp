@@ -2,7 +2,7 @@
 #define __CONV_HPP__
 
 #include <data_types.hpp>
-#include <cudnn.h>
+#include <hipDNN.h>
 #include<logger.hpp>
 
 
@@ -16,8 +16,8 @@ namespace livai {
 			class conv
 			{
 			private:
-				cudnnTensorFormat_t default_tensor_format;
-				cudnnDataType_t default_data_type;
+				hipdnnTensorFormat_t default_tensor_format;
+				hipdnnDataType_t default_data_type;
 
 				gpu_float_array d_workspace; 
 				gpu_float_array d_kernel;
@@ -26,27 +26,27 @@ namespace livai {
 				
 				size_t workspace_bytes;
 
-				cudnnHandle_t cudnn;
-				cudnnTensorDescriptor_t input_descriptor;
-				cudnnTensorDescriptor_t z_descriptor;
+				hipdnnHandle_t cudnn;
+				hipdnnTensorDescriptor_t input_descriptor;
+				hipdnnTensorDescriptor_t z_descriptor;
 
-				cudnnTensorDescriptor_t output_descriptor;
-				cudnnFilterDescriptor_t kernel_descriptor;
-				cudnnTensorDescriptor_t bias_descriptor;
-				cudnnConvolutionDescriptor_t convolution_descriptor;
-				cudnnConvolutionFwdAlgo_t convolution_algorithm;
-				cudnnActivationDescriptor_t activation_descriptor;
+				hipdnnTensorDescriptor_t output_descriptor;
+				hipdnnFilterDescriptor_t kernel_descriptor;
+				hipdnnTensorDescriptor_t bias_descriptor;
+				hipdnnConvolutionDescriptor_t convolution_descriptor;
+				hipdnnConvolutionFwdAlgo_t convolution_algorithm;
+				hipdnnActivationDescriptor_t activation_descriptor;
 
 				
 				void initModelWeight(const cnpy::NpyArray& h_kernel, const cnpy::NpyArray& h_bias)
 				{
 					// load kernel
 					d_kernel.init(h_kernel.shape);
-					cudaMemcpy(d_kernel.ptr, h_kernel.data<float_t>(), d_kernel.size()*sizeof(float_t), cudaMemcpyHostToDevice);
+					hipMemcpy(d_kernel.ptr, h_kernel.data<float_t>(), d_kernel.size()*sizeof(float_t), hipMemcpyHostToDevice);
 
 					// load bias
 					d_bias.init(h_bias.shape);
-					cudaMemcpy(d_bias.ptr, h_bias.data<float_t>(), d_bias.size()*sizeof(float_t), cudaMemcpyHostToDevice);
+					hipMemcpy(d_bias.ptr, h_bias.data<float_t>(), d_bias.size()*sizeof(float_t), hipMemcpyHostToDevice);
 				}
 
 				void initConvTensors(size_t in_rows, size_t in_cols, size_t in_channels, 
@@ -54,10 +54,10 @@ namespace livai {
 					size_t kernel_height, size_t kernel_width, 
 					size_t batch_size)
 				{
-					checkCUDNN(cudnnCreate(&cudnn));
+					checkCUDNN(hipdnnCreate(&cudnn));
 				
-					checkCUDNN(cudnnCreateTensorDescriptor(&input_descriptor));
-					checkCUDNN(cudnnSetTensor4dDescriptor(input_descriptor,
+					checkCUDNN(hipdnnCreateTensorDescriptor(&input_descriptor));
+					checkCUDNN(hipdnnSetTensor4dDescriptor(input_descriptor,
                                       /*format=*/default_tensor_format,
                                       /*dataType=*/default_data_type,
                                       /*batch_size=*/batch_size,
@@ -65,8 +65,8 @@ namespace livai {
                                       /*image_height=*/in_rows,
                                       /*image_width=*/in_cols));
 
-					checkCUDNN(cudnnCreateTensorDescriptor(&z_descriptor));
-					checkCUDNN(cudnnSetTensor4dDescriptor(z_descriptor,
+					checkCUDNN(hipdnnCreateTensorDescriptor(&z_descriptor));
+					checkCUDNN(hipdnnSetTensor4dDescriptor(z_descriptor,
                                       /*format=*/default_tensor_format,
                                       /*dataType=*/default_data_type,
                                       /*batch_size=*/batch_size,
@@ -74,8 +74,8 @@ namespace livai {
                                       /*image_height=*/out_rows,
                                       /*image_width=*/out_cols));
 
-					checkCUDNN(cudnnCreateTensorDescriptor(&output_descriptor));
-					checkCUDNN(cudnnSetTensor4dDescriptor(output_descriptor,
+					checkCUDNN(hipdnnCreateTensorDescriptor(&output_descriptor));
+					checkCUDNN(hipdnnSetTensor4dDescriptor(output_descriptor,
                                       /*format=*/default_tensor_format,
                                       /*dataType=*/default_data_type,
                                       /*batch_size=*/batch_size,
@@ -83,8 +83,8 @@ namespace livai {
                                       /*image_height=*/out_rows,
                                       /*image_width=*/out_cols));
 
-					checkCUDNN(cudnnCreateFilterDescriptor(&kernel_descriptor));
-					checkCUDNN(cudnnSetFilter4dDescriptor(kernel_descriptor,
+					checkCUDNN(hipdnnCreateFilterDescriptor(&kernel_descriptor));
+					checkCUDNN(hipdnnSetFilter4dDescriptor(kernel_descriptor,
                                       /*dataType=*/default_data_type,
                                       /*format=*/default_tensor_format,
                                       /*out_channels=*/out_channels,
@@ -92,8 +92,8 @@ namespace livai {
                                       /*kernel_height=*/kernel_height,
                                       /*kernel_width=*/kernel_width));
 
-					checkCUDNN(cudnnCreateTensorDescriptor(&bias_descriptor));
-					checkCUDNN(cudnnSetTensor4dDescriptor(bias_descriptor,
+					checkCUDNN(hipdnnCreateTensorDescriptor(&bias_descriptor));
+					checkCUDNN(hipdnnSetTensor4dDescriptor(bias_descriptor,
                                       /*format=*/default_tensor_format,
                                       /*dataType=*/default_data_type,
                                       /*batch_size=*/1,
@@ -101,42 +101,42 @@ namespace livai {
                                       /*image_height=*/1,
                                       /*image_width=*/1));
 
-					checkCUDNN(cudnnCreateActivationDescriptor(&activation_descriptor));
-					checkCUDNN(cudnnSetActivationDescriptor(activation_descriptor,
-                                        /*mode=*/CUDNN_ACTIVATION_RELU,
-                                        /*reluNanOpt=*/CUDNN_NOT_PROPAGATE_NAN,
+					checkCUDNN(hipdnnCreateActivationDescriptor(&activation_descriptor));
+					checkCUDNN(hipdnnSetActivationDescriptor(activation_descriptor,
+                                        /*mode=*/HIPDNN_ACTIVATION_RELU,
+                                        /*reluNanOpt=*/HIPDNN_NOT_PROPAGATE_NAN,
                                         /*relu_coef=*/0));
 
 					// compute pad
 					size_t pad_height = (out_rows - 1 + kernel_height - in_rows) / 2 ; 
 					size_t pad_width = (out_cols - 1 + kernel_width - in_cols) / 2 ; 
 
-					checkCUDNN(cudnnCreateConvolutionDescriptor(&convolution_descriptor));
-					checkCUDNN(cudnnSetConvolution2dDescriptor(convolution_descriptor,
+					checkCUDNN(hipdnnCreateConvolutionDescriptor(&convolution_descriptor));
+					checkCUDNN(hipdnnSetConvolution2dDescriptor(convolution_descriptor,
                                            /*pad_height=*/pad_height,
                                            /*pad_width=*/pad_width,
                                            /*vertical_stride=*/1,
                                            /*horizontal_stride=*/1,
                                            /*dilation_height=*/1,
                                            /*dilation_width=*/1,
-                                           /*mode=*/CUDNN_CROSS_CORRELATION,
-                                           /*computeType=*/CUDNN_DATA_FLOAT));
+                                           /*mode=*/HIPDNN_CROSS_CORRELATION,
+                                           /*computeType=*/HIPDNN_DATA_FLOAT));
 
 					//convolution_algorithm = CUDNN_CONVOLUTION_FWD_ALGO_IMPLICIT_​PRECOMP_GEMM;
 
 					
-					checkCUDNN(cudnnGetConvolutionForwardAlgorithm(cudnn,
+					checkCUDNN(hipdnnGetConvolutionForwardAlgorithm(cudnn,
                                         input_descriptor,
                                         kernel_descriptor,
                                         convolution_descriptor,
                                         output_descriptor,
-                                        CUDNN_CONVOLUTION_FWD_PREFER_FASTEST,
+                                        HIPDNN_CONVOLUTION_FWD_PREFER_FASTEST,
                                         0,
                                         &convolution_algorithm));
 					
 
 					workspace_bytes = 0;
-					checkCUDNN(cudnnGetConvolutionForwardWorkspaceSize(cudnn,
+					checkCUDNN(hipdnnGetConvolutionForwardWorkspaceSize(cudnn,
                                                    input_descriptor,
                                                    kernel_descriptor,
                                                    convolution_descriptor,
@@ -161,8 +161,8 @@ namespace livai {
 					size_t kernel_height, size_t kernel_width, 
 					size_t batch_size = 1)
 				{
-					default_tensor_format = CUDNN_TENSOR_NHWC;
-					default_data_type = CUDNN_DATA_FLOAT;
+					default_tensor_format = HIPDNN_TENSOR_NHWC;
+					default_data_type = HIPDNN_DATA_FLOAT;
 
 					initConvTensors(in_rows, in_cols, in_channels, out_rows, out_cols, out_channels, kernel_height, kernel_width, batch_size);
 					initModelWeight(h_kernel, h_bias);
@@ -178,8 +178,8 @@ namespace livai {
 					/*
 					//cudnnConvolutionBiasActivationForward
 					//CUDNN_CONVOLUTION_FWD_ALGO_IMPLICIT_​PRECOMP_GEMM
-					//CUDNN_ACTIVATION_IDENTITY
-					checkCUDNN(cudnnConvolutionForward(cudnn,
+					//HIPDNN_ACTIVATION_PATHTRU
+					checkCUDNN(hipdnnConvolutionForward(cudnn,
                                    &alpha,
                                    input_descriptor,
                                    d_input.ptr,
@@ -217,12 +217,12 @@ namespace livai {
 				// free host & device memory
 				~conv()
 				{
-					cudnnDestroyTensorDescriptor(input_descriptor);
-					cudnnDestroyTensorDescriptor(z_descriptor);
-					cudnnDestroyTensorDescriptor(output_descriptor);
-					cudnnDestroyFilterDescriptor(kernel_descriptor);
-					cudnnDestroyConvolutionDescriptor(convolution_descriptor);
-					cudnnDestroy(cudnn);
+					hipdnnDestroyTensorDescriptor(input_descriptor);
+					hipdnnDestroyTensorDescriptor(z_descriptor);
+					hipdnnDestroyTensorDescriptor(output_descriptor);
+					hipdnnDestroyFilterDescriptor(kernel_descriptor);
+					hipdnnDestroyConvolutionDescriptor(convolution_descriptor);
+					hipdnnDestroy(cudnn);
 
 				}
 			};

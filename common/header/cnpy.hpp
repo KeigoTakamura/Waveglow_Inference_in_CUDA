@@ -14,6 +14,7 @@
 #include<memory>
 #include<stdint.h>
 #include<numeric>
+#include <hip/hip_runtime.h>
 
 namespace cnpy {
 

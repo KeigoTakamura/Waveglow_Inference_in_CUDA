@@ -1,0 +1,590 @@
+make
+hipcc -std=c++11    -Iwaveglow/header/ -Icommon/header -Isys/header  -I/opt/rocm-3.1.0/include/ -I/opt/rocm/hipdnn/include   -o sys/obj/dropout.o -c sys/src/dropout.cpp -D DEBUG
+hipcc -std=c++11    -Iwaveglow/header/ -Icommon/header -Isys/header  -I/opt/rocm-3.1.0/include/ -I/opt/rocm/hipdnn/include   -o sys/obj/conv_grad.o -c sys/src/conv_grad.cpp -D DEBUG
+hipcc -std=c++11    -Iwaveglow/header/ -Icommon/header -Isys/header  -I/opt/rocm-3.1.0/include/ -I/opt/rocm/hipdnn/include   -o sys/obj/dense_mv.o -c sys/src/dense_mv.cpp -D DEBUG
+hipcc -std=c++11    -Iwaveglow/header/ -Icommon/header -Isys/header  -I/opt/rocm-3.1.0/include/ -I/opt/rocm/hipdnn/include   -o sys/obj/conv.o -c sys/src/conv.cpp -D DEBUG
+hipcc -std=c++11    -Iwaveglow/header/ -Icommon/header -Isys/header  -I/opt/rocm-3.1.0/include/ -I/opt/rocm/hipdnn/include   -o sys/obj/dense.o -c sys/src/dense.cpp -D DEBUG
+hipcc -std=c++11    -Iwaveglow/header/ -Icommon/header -Isys/header  -I/opt/rocm-3.1.0/include/ -I/opt/rocm/hipdnn/include   -o waveglow/obj/upsample.o -c waveglow/src/upsample.cpp -D DEBUG
+hipcc -std=c++11    -Iwaveglow/header/ -Icommon/header -Isys/header  -I/opt/rocm-3.1.0/include/ -I/opt/rocm/hipdnn/include   -o waveglow/obj/WN.o -c waveglow/src/WN.cpp -D DEBUG
+hipcc -std=c++11    -Iwaveglow/header/ -Icommon/header -Isys/header  -I/opt/rocm-3.1.0/include/ -I/opt/rocm/hipdnn/include   -o waveglow/obj/main.o -c waveglow/src/main.cpp -D DEBUG
+In file included from sys/src/conv_grad.cpp:2:
+In file included from sys/header/conv_grad.hpp:4:
+common/header/data_types.hpp:121:6: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                        delete h_f;
+                                        ^
+                                              []
+common/header/data_types.hpp:109:15: note: allocated with 'new[]' here
+                                        T* h_f = new T[N];
+                                                 ^
+common/header/data_types.hpp:165:7: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                                delete h_f;
+                                                ^
+                                                      []
+common/header/data_types.hpp:145:16: note: allocated with 'new[]' here
+                                                T* h_f = new T[N];
+                                                         ^
+common/header/data_types.hpp:180:26: warning: 'hc' attribute ignored when parsing type [-Wignored-attributes]
+                        typedef gup_data_type<__constant__ float_t> const_gpu_float_array;
+                                              ^~~~~~~~~~~~
+/opt/rocm-3.1.0/include/hip/hcc_detail/host_defines.h:63:37: note: expanded from macro '__constant__'
+#define __constant__ __attribute__((hc))
+                                    ^~
+In file included from sys/src/conv_grad.cpp:2:
+sys/header/conv_grad.hpp:1:2: error: unterminated conditional directive
+#ifndef __conv_grad_HPP__
+ ^
+sys/src/conv_grad.cpp:54:24: error: no matching function for call to 'hipdnnSetFilter4dDescriptor'
+            checkCUDNN(hipdnnSetFilter4dDescriptor(kernel_descriptor,
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+common/header/macros.hpp:16:30: note: expanded from macro 'checkCUDNN'
+    hipdnnStatus_t status = (expression);                     \
+                             ^~~~~~~~~~
+/opt/rocm/hipdnn/include/hipDNN.h:552:1: note: candidate function not viable: no known conversion from 'hipdnnDataType_t' to 'hipdnnTensorFormat_t' for 2nd argument
+hipdnnSetFilter4dDescriptor( hipdnnFilterDescriptor_t filterDesc,
+^
+In file included from sys/src/dense.cpp:2:
+In file included from sys/header/dense.hpp:5:
+common/header/data_types.hpp:121:6: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                        delete h_f;
+                                        ^
+                                              []
+common/header/data_types.hpp:109:15: note: allocated with 'new[]' here
+                                        T* h_f = new T[N];
+                                                 ^
+common/header/data_types.hpp:165:7: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                                delete h_f;
+                                                ^
+                                                      []
+common/header/data_types.hpp:145:16: note: allocated with 'new[]' here
+                                                T* h_f = new T[N];
+                                                         ^
+common/header/data_types.hpp:180:26: warning: 'hc' attribute ignored when parsing type [-Wignored-attributes]
+                        typedef gup_data_type<__constant__ float_t> const_gpu_float_array;
+                                              ^~~~~~~~~~~~
+/opt/rocm-3.1.0/include/hip/hcc_detail/host_defines.h:63:37: note: expanded from macro '__constant__'
+#define __constant__ __attribute__((hc))
+                                    ^~
+In file included from waveglow/src/upsample.cpp:2:
+In file included from waveglow/header/upsample.hpp:7:
+In file included from sys/header/conv.hpp:4:
+common/header/data_types.hpp:121:6: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                        delete h_f;
+                                        ^
+                                              []
+common/header/data_types.hpp:109:15: note: allocated with 'new[]' here
+                                        T* h_f = new T[N];
+                                                 ^
+common/header/data_types.hpp:165:7: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                                delete h_f;
+                                                ^
+                                                      []
+common/header/data_types.hpp:145:16: note: allocated with 'new[]' here
+                                                T* h_f = new T[N];
+                                                         ^
+common/header/data_types.hpp:180:26: warning: 'hc' attribute ignored when parsing type [-Wignored-attributes]
+                        typedef gup_data_type<__constant__ float_t> const_gpu_float_array;
+                                              ^~~~~~~~~~~~
+/opt/rocm-3.1.0/include/hip/hcc_detail/host_defines.h:63:37: note: expanded from macro '__constant__'
+#define __constant__ __attribute__((hc))
+                                    ^~
+In file included from waveglow/src/upsample.cpp:2:
+In file included from waveglow/header/upsample.hpp:8:
+sys/header/conv_grad.hpp:1:2: error: unterminated conditional directive
+#ifndef __conv_grad_HPP__
+ ^
+In file included from sys/src/dense.cpp:2:
+sys/header/dense.hpp:1:2: error: unterminated conditional directive
+#ifndef __DENSE_HPP__
+ ^
+In file included from waveglow/src/main.cpp:6:
+In file included from waveglow/header/upsample.hpp:7:
+In file included from sys/header/conv.hpp:4:
+common/header/data_types.hpp:121:6: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                        delete h_f;
+                                        ^
+                                              []
+common/header/data_types.hpp:109:15: note: allocated with 'new[]' here
+                                        T* h_f = new T[N];
+                                                 ^
+common/header/data_types.hpp:165:7: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                                delete h_f;
+                                                ^
+                                                      []
+common/header/data_types.hpp:145:16: note: allocated with 'new[]' here
+                                                T* h_f = new T[N];
+                                                         ^
+common/header/data_types.hpp:180:26: warning: 'hc' attribute ignored when parsing type [-Wignored-attributes]
+                        typedef gup_data_type<__constant__ float_t> const_gpu_float_array;
+                                              ^~~~~~~~~~~~
+/opt/rocm-3.1.0/include/hip/hcc_detail/host_defines.h:63:37: note: expanded from macro '__constant__'
+#define __constant__ __attribute__((hc))
+                                    ^~
+In file included from In file included from waveglow/src/upsample.cpp:2:
+In file included from waveglow/header/upsample.hpp:10:
+sys/header/dense.hpp:1:2: error: unterminated conditional directive
+#ifndef __DENSE_HPP__
+ ^
+In file included from waveglow/src/upsample.cpp:2:
+waveglow/header/upsample.hpp:43:2: error: C++ requires a type specifier for all declarations
+(base) 
+ ^
+waveglow/header/upsample.hpp:43:7: error: waveglow/src/main.cppexpected ';' after top level declarator:6
+:
+In file included from waveglow/header/upsample.hpp(base) 
+      ^
+      ;
+:8:
+sys/header/conv_grad.hpp:1:2: error: unterminated conditional directive
+#ifndef __conv_grad_HPP__
+ ^
+waveglow/src/upsample.cpp:55:6: error: use of undeclared identifier 'upsample'
+void upsample::set(hipdnnHandle_t& cudnn, size_t max_mel_length)
+     ^
+waveglow/src/upsample.cpp:91:5: warning: '/*' within block comment [-Wcomment]
+    /* transpose conv1d initialization*/
+    ^
+In file included from waveglow/src/main.cpp:In file included from sys/src/conv.cpp:2:
+In file included from sys/header/conv.hpp:4:
+6common/header/data_types.hpp:
+In file included from waveglow/header/upsample.hpp:10:
+sys/header/dense.hpp:1:2: error: unterminated conditional directive
+#ifndef __DENSE_HPP__
+ ^
+In file included from waveglow/src/main.cpp:9:
+In file included from waveglow/header/WN.hpp:9:
+sys/header/dense.hpp:1:2: error: unterminated conditional directive
+#ifndef __DENSE_HPP__
+ ^
+In file included from waveglow/src/main.cpp:9:
+waveglow/header/WN.hpp:10:10: fatal error: 'hiprand.h' file not found
+#include <hiprand.h>
+         ^~~~~~~~~~~
+waveglow/src/upsample.cpp:119:6: error: use of undeclared identifier 'upsample'
+void upsample::operator() (hipdnnHandle_t& cudnn, gpu_float_array& input_mel, gpu_float_array& d_output, gpu_float_array& d_workspace)
+     ^
+:121:6: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                        delete h_f;
+                                        ^
+                                              []
+common/header/data_types.hpp:109:15: note: allocated with 'new[]' here
+                                        T* h_f = new T[N];
+                                                 ^
+common/header/data_types.hpp:165:7: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                                delete h_f;
+                                                ^
+                                                      []
+common/header/data_types.hpp:145:16: note: allocated with 'new[]' here
+                                                T* h_f = new T[N];
+                                                         ^
+common/header/data_types.hpp:180:26: warning: 'hc' attribute ignored when parsing type [-Wignored-attributes]
+                        typedef gup_data_type<__constant__ float_t> const_gpu_float_array;
+                                              ^~~~~~~~~~~~
+/opt/rocm-3.1.0/include/hip/hcc_detail/host_defines.h:63:37: note: expanded from macro '__constant__'
+#define __constant__ __attribute__((hc))
+                                    ^~
+3 warnings and 4 errors generated.
+In file included from sys/src/dropout.cpp:2:
+In file included from sys/header/dropout.hpp:4:
+common/header/data_types.hpp:121:6: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                        delete h_f;
+                                        ^
+                                              []
+common/header/data_types.hpp:109:15: note: allocated with 'new[]' here
+                                        T* h_f = new T[N];
+                                                 ^
+common/header/data_types.hpp:165:7: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                                delete h_f;
+                                                ^
+                                                      []
+common/header/data_types.hpp:145:16: note: allocated with 'new[]' here
+                                                T* h_f = new T[N];
+                                                         ^
+common/header/data_types.hpp:180:26: warning: 'hc' attribute ignored when parsing type [-Wignored-attributes]
+                        typedef gup_data_type<__constant__ float_t> const_gpu_float_array;
+                                              ^~~~~~~~~~~~
+/opt/rocm-3.1.0/include/hip/hcc_detail/host_defines.h:63:37: note: expanded from macro '__constant__'
+#define __constant__ __attribute__((hc))
+                                    ^~
+waveglow/src/upsample.cpp:178:1: error: use of undeclared identifier 'upsample'
+upsample::~upsample()
+^
+In file included from sys/src/dropout.cpp:2:
+sys/header/dropout.hpp:6:10: fatal error: 'hiprand.h' file not found
+#include <hiprand.h>
+         ^~~~~~~~~~~
+In file included from waveglow/src/WN.cpp:2:
+In file included from waveglow/header/WN.hpp:7:
+In file included from sys/header/conv.hpp:4:
+common/header/data_types.hpp:121:6: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                        delete h_f;
+                                        ^
+                                              []
+common/header/data_types.hpp:109:15: note: allocated with 'new[]' here
+                                        T* h_f = new T[N];
+                                                 ^
+common/header/data_types.hpp:sys/src/conv.cpp:54:24: error: no matching function for call to 'hipdnnSetFilter4dDescriptor'
+            checkCUDNN(hipdnnSetFilter4dDescriptor(kernel_descriptor,
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+common/header/macros.hpp:16:30: note: expanded from macro 'checkCUDNN'
+    hipdnnStatus_t status = (expression);                     \
+                             ^~~~~~~~~~
+165:7: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                                delete h_f;
+                                                ^3/opt/rocm/hipdnn/include/hipDNN.h warning:s552 and :1
+1 error: generated .
+                                                      []
+note: candidate function not viable: no known conversion from 'hipdnnDataType_t' to 'hipdnnTensorFormat_t' for 2nd argumentcommon/header/data_types.hpp:
+145hipdnnSetFilter4dDescriptor( hipdnnFilterDescriptor_t filterDesc,:16: note: allocated with 'new[]' here
+
+                                                T* h_f = new T[N];^
+
+                                                         ^
+common/header/data_types.hpp:180:26: warning: 'hc' attribute ignored when parsing type [-Wignored-attributes]
+                        typedef gup_data_type<__constant__ float_t> const_gpu_float_array;
+                                              ^~~~~~~~~~~~
+/opt/rocm-3.1.0/include/hip/hcc_detail/host_defines.h:63:37: note: expanded from macro '__constant__'
+#define __constant__ __attribute__((hc))
+                                    ^~
+In file included from waveglow/src/WN.cpp:2:
+In file included from waveglow/header/WN.hpp:9:
+sys/header/dense.hpp:1:2: error: unterminated conditional directive
+#ifndef __DENSE_HPP__
+ ^
+In file included from waveglow/src/WN.cpp:2:
+waveglow/header/WN.hpp:10:10: fatal error: 'hiprand.h' file not found
+#include <hiprand.h>
+         ^~~~~~~~~~~
+sys/src/conv.cpp:117:66: error: use of undeclared identifier 'HIPDNN_TENSOR_OP_MATH_ALLOW_CONVERSION'
+            hipdnnSetConvolutionMathType(convolution_descriptor, HIPDNN_TENSOR_OP_MATH_ALLOW_CONVERSION);
+                                                                 ^
+3 warnings and 2 errors generated.
+In file included from sys/src/dense_mv.cpp:2:
+In file included from sys/header/dense_mv.hpp:4:
+common/header/data_types.hpp:121:6: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                        delete h_f;
+                                        ^
+                                              []
+common/header/data_types.hpp:109:15: note: allocated with 'new[]' here
+                                        T* h_f = new T[N];
+                                                 ^
+common/header/data_types.hpp:165:7: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                                delete h_f;
+                                                ^
+                                                      []
+common/header/data_types.hpp:145:16: note: allocated with 'new[]' here
+                                                T* h_f = new T[N];
+                                                         ^
+common/header/data_types.hpp:180:26: warning: 'hc' attribute ignored when parsing type [-Wignored-attributes]
+                        typedef gup_data_type<__constant__ float_t> const_gpu_float_array;
+                                              ^~~~~~~~~~~~
+/opt/rocm-3.1.0/include/hip/hcc_detail/host_defines.h:63:37: note: expanded from macro '__constant__'
+#define __constant__ __attribute__((hc))
+                                    ^~
+In file included from sys/src/dense_mv.cpp:2:
+sys/header/dense_mv.hpp:1:2: error: unterminated conditional directive
+#ifndef __DENSE_MV_HPP__
+ ^
+3 warnings and 2 errors generated.
+3 warnings and 1 error generated.
+4 warnings and 7 errors generated.
+3 warnings and 2 errors generated.
+3 warnings and 1 error generated.
+In file included from waveglow/src/main.cpp:6:
+In file included from waveglow/header/upsample.hpp:7:
+In file included from sys/header/conv.hpp:4:
+common/header/data_types.hpp:121:6: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                        delete h_f;
+                                        ^
+                                              []
+common/header/data_types.hpp:109:15: note: allocated with 'new[]' here
+                                        T* h_f = new T[N];
+                                                 ^
+common/header/data_types.hpp:165:7: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                                delete h_f;
+                                                ^
+                                                      []
+common/header/data_types.hpp:145:16: note: allocated with 'new[]' here
+                                                T* h_f = new T[N];
+                                                         ^
+common/header/data_types.hpp:180:26: warning: 'hc' attribute ignored when parsing type [-Wignored-attributes]
+                        typedef gup_data_type<__constant__ float_t> const_gpu_float_array;
+                                              ^~~~~~~~~~~~
+/opt/rocm-3.1.0/include/hip/hcc_detail/host_defines.h:63:37: note: expanded from macro '__constant__'
+#define __constant__ __attribute__((hc))
+                                    ^~
+In file included from waveglow/src/main.cpp:6:
+In file included from waveglow/header/upsample.hpp:8:
+sys/header/conv_grad.hpp:1:2: error: unterminated conditional directive
+#ifndef __conv_grad_HPP__
+ ^
+In file included from waveglow/src/main.cpp:6:
+In file included from waveglow/header/upsample.hpp:10:
+sys/header/dense.hpp:1:2: error: unterminated conditional directive
+#ifndef __DENSE_HPP__
+ ^
+In file included from waveglow/src/main.cpp:9:
+In file included from waveglow/header/WN.hpp:9:
+sys/header/dense.hpp:1:2: error: unterminated conditional directive
+#ifndef __DENSE_HPP__
+ ^
+In file included from waveglow/src/main.cpp:9:
+waveglow/header/WN.hpp:10:10: fatal error: 'hiprand.h' file not found
+#include <hiprand.h>
+         ^~~~~~~~~~~
+3 warnings and 4 errors generated.
+Makefile:38: recipe for target 'waveglow/obj/main.o' failed
+make: *** [waveglow/obj/main.o] Error 1
+make: *** Waiting for unfinished jobs....
+In file included from In file included from sys/src/dense_mv.cpp:2:
+In file included from sys/header/dense_mv.hpp:4:
+common/header/data_types.hpp:121:6: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                        delete h_f;
+                                        ^
+                                              []
+common/header/data_types.hpp:109:15: note: allocated with 'new[]' here
+                                        T* h_f = new T[N];
+                                                 ^
+common/header/data_types.hpp:165:7: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                                delete h_f;
+                                                ^
+                                                      []
+common/header/data_types.hpp:145:16: note: allocated with 'new[]' here
+                                                T* h_f = new T[N];
+                                                         ^
+common/header/data_types.hpp:180:26: warning: 'hc' attribute ignored when parsing type [-Wignored-attributes]
+                        typedef gup_data_type<__constant__ float_t> const_gpu_float_array;
+                                              ^~~~~~~~~~~~
+/opt/rocm-3.1.0/include/hip/hcc_detail/host_defines.h:63:37: note: expanded from macro '__constant__'
+#define __constant__ __attribute__((hc))
+                                    ^~
+waveglow/src/WN.cpp:2:
+In file included from waveglow/header/WN.hpp:7:
+In file included from sys/header/conv.hpp:4:
+common/header/data_types.hpp:121:6: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                        delete h_f;
+                                        ^
+                                              []
+common/header/data_types.hpp:109:15: note: allocated with 'new[]' here
+                                        T* h_f = new T[N];
+                                                 ^
+common/header/data_types.hpp:165:7: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                                delete h_f;
+                                                ^
+                                                      []
+common/header/data_types.hpp:145:16: note: allocated with 'new[]' here
+                                                T* h_f = new T[N];
+                                                         ^
+common/header/data_types.hpp:180:26: warning: 'hc' attribute ignored when parsing type [-Wignored-attributes]
+                        typedef gup_data_type<__constant__ float_t> const_gpu_float_array;
+                                              ^~~~~~~~~~~~
+/opt/rocm-3.1.0/include/hip/hcc_detail/host_defines.h:63:37: note: expanded from macro '__constant__'
+#define __constant__ __attribute__((hc))
+                                    ^~
+In file included from sys/src/dense_mv.cpp:2:
+sys/header/dense_mv.hpp:1:2: error: unterminated conditional directive
+#ifndef __DENSE_MV_HPP__
+ ^
+In file included from waveglow/src/WN.cpp:2:
+In file included from waveglow/header/WN.hpp:9:
+sys/header/dense.hpp:1:2: error: unterminated conditional directive
+#ifndef __DENSE_HPP__
+ ^
+In file included from waveglow/src/WN.cpp:2:
+waveglow/header/WN.hpp:10:10: fatal error: 'hiprand.h' file not found
+#include <hiprand.h>
+         ^~~~~~~~~~~
+3 warnings and 2 errors generated.
+Makefile:38: recipe for target 'waveglow/obj/WN.o' failed
+make: *** [waveglow/obj/WN.o] Error 1
+In file included from sys/src/dropout.cpp:2:
+In file included from sys/header/dropout.hpp:4:
+common/header/data_types.hpp:121:6: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                        delete h_f;
+                                        ^
+                                              []
+common/header/data_types.hpp:109:15: note: allocated with 'new[]' here
+                                        T* h_f = new T[N];
+                                                 ^
+common/header/data_types.hpp:165:7: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                                delete h_f;
+                                                ^
+                                                      []
+common/header/data_types.hpp:145:16: note: allocated with 'new[]' here
+                                                T* h_f = new T[N];
+                                                         ^
+common/header/data_types.hpp:180:26: warning: 'hc' attribute ignored when parsing type [-Wignored-attributes]
+                        typedef gup_data_type<__constant__ float_t> const_gpu_float_array;
+                                              ^~~~~~~~~~~~
+/opt/rocm-3.1.0/include/hip/hcc_detail/host_defines.h:63:37: note: expanded from macro '__constant__'
+#define __constant__ __attribute__((hc))
+                                    ^~
+In file included from sys/src/dropout.cpp:2:
+sys/header/dropout.hpp:6:10: fatal error: 'hiprand.h' file not found
+#include <hiprand.h>
+         ^~~~~~~~~~~
+3 warnings and 1 error generated.
+Makefile:41: recipe for target 'sys/obj/dropout.o' failed
+make: *** [sys/obj/dropout.o] Error 1
+In file included from sys/src/dense.cpp:2:
+In file included from sys/header/dense.hpp:5:
+common/header/data_types.hpp:121:6: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                        delete h_f;
+                                        ^
+                                              []
+common/header/data_types.hpp:109:15: note: allocated with 'new[]' here
+                                        T* h_f = new T[N];
+                                                 ^
+common/header/data_types.hpp:165:7: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                                delete h_f;
+                                                ^
+                                                      []
+common/header/data_types.hpp:145:16: note: allocated with 'new[]' here
+                                                T* h_f = new T[N];
+                                                         ^
+common/header/data_types.hpp:180:26: warning: 'hc' attribute ignored when parsing type [-Wignored-attributes]
+                        typedef gup_data_type<__constant__ float_t> const_gpu_float_array;
+                                              ^~~~~~~~~~~~
+/opt/rocm-3.1.0/include/hip/hcc_detail/host_defines.h:63:37: note: expanded from macro '__constant__'
+#define __constant__ __attribute__((hc))
+                                    ^~
+In file included from sys/src/dense.cpp:2:
+sys/header/dense.hpp:1:2: error: unterminated conditional directive
+#ifndef __DENSE_HPP__
+ ^
+In file included from sys/src/conv_grad.cpp:2:
+In file included from sys/header/conv_grad.hpp:4:
+common/header/data_types.hpp:121:6: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                        delete h_f;
+                                        ^
+                                              []
+common/header/data_types.hpp:109:15: note: allocated with 'new[]' here
+                                        T* h_f = new T[N];
+                                                 ^
+common/header/data_types.hpp:165:7: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                                delete h_f;
+                                                ^
+                                                      []
+common/header/data_types.hpp:145:16: note: allocated with 'new[]' here
+                                                T* h_f = new T[N];
+                                                         ^
+common/header/data_types.hpp:180:26: warning: 'hc' attribute ignored when parsing type [-Wignored-attributes]
+                        typedef gup_data_type<__constant__ float_t> const_gpu_float_array;
+                                              ^~~~~~~~~~~~
+/opt/rocm-3.1.0/include/hip/hcc_detail/host_defines.h:63:37: note: expanded from macro '__constant__'
+#define __constant__ __attribute__((hc))
+                                    ^~
+In file included from sys/src/conv_grad.cpp:2:
+sys/header/conv_grad.hpp:1:2: error: unterminated conditional directive
+#ifndef __conv_grad_HPP__
+ ^
+sys/src/conv_grad.cpp:54:24: error: no matching function for call to 'hipdnnSetFilter4dDescriptor'
+            checkCUDNN(hipdnnSetFilter4dDescriptor(kernel_descriptor,
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+common/header/macros.hpp:16:30: note: expanded from macro 'checkCUDNN'
+    hipdnnStatus_t status = (expression);                     \
+                             ^~~~~~~~~~
+/opt/rocm/hipdnn/include/hipDNN.h:552:1: note: candidate function not viable: no known conversion from 'hipdnnDataType_t' to 'hipdnnTensorFormat_t' for 2nd argument
+hipdnnSetFilter4dDescriptor( hipdnnFilterDescriptor_t filterDesc,
+^
+In file included from waveglow/src/upsample.cpp:2:
+In file included from waveglow/header/upsample.hpp:7:
+In file included from sys/header/conv.hpp:4:
+common/header/data_types.hpp:121:6: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                        delete h_f;
+                                        ^
+                                              []
+common/header/data_types.hpp:109:15: note: allocated with 'new[]' here
+                                        T* h_f = new T[N];
+                                                 ^
+common/header/data_types.hpp:165:7: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                                delete h_f;
+                                                ^
+                                                      []
+common/header/data_types.hpp:145:16: note: allocated with 'new[]' here
+                                                T* h_f = new T[N];
+                                                         ^
+common/header/data_types.hpp:180:26: warning: 'hc' attribute ignored when parsing type [-Wignored-attributes]
+                        typedef gup_data_type<__constant__ float_t> const_gpu_float_array;
+                                              ^~~~~~~~~~~~
+/opt/rocm-3.1.0/include/hip/hcc_detail/host_defines.h:63:37: note: expanded from macro '__constant__'
+#define __constant__ __attribute__((hc))
+                                    ^~
+In file included from waveglow/src/upsample.cpp:2:
+In file included from waveglow/header/upsample.hpp:8:
+sys/header/conv_grad.hpp:1:2: error: unterminated conditional directive
+#ifndef __conv_grad_HPP__
+ ^
+3 warnings and 1 error generated.
+Makefile:41: recipe for target 'sys/obj/dense_mv.o' failed
+make: *** [sys/obj/dense_mv.o] Error 1
+In file included from waveglow/src/upsample.cpp:2:
+In file included from waveglow/header/upsample.hpp:10:
+sys/header/dense.hpp:1:2: error: unterminated conditional directive
+#ifndef __DENSE_HPP__
+ ^
+In file included from waveglow/src/upsample.cpp:2:
+waveglow/header/upsample.hpp:43:2: error: C++ requires a type specifier for all declarations
+(base) 
+ ^
+waveglow/header/upsample.hpp:43:7: error: expected ';' after top level declarator
+(base) 
+      ^
+      ;
+waveglow/src/upsample.cpp:55:6: error: use of undeclared identifier 'upsample'
+void upsample::set(hipdnnHandle_t& cudnn, size_t max_mel_length)
+     ^
+waveglow/src/upsample.cpp:91:5: warning: '/*' within block comment [-Wcomment]
+    /* transpose conv1d initialization*/
+    ^
+waveglow/src/upsample.cpp:119:6: error: use of undeclared identifier 'upsample'
+void upsample::operator() (hipdnnHandle_t& cudnn, gpu_float_array& input_mel, gpu_float_array& d_output, gpu_float_array& d_workspace)
+     ^
+waveglow/src/upsample.cpp:178:1: error: use of undeclared identifier 'upsample'
+upsample::~upsample()
+^
+In file included from sys/src/conv.cpp:2:
+In file included from sys/header/conv.hpp:4:
+common/header/data_types.hpp:121:6: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                        delete h_f;
+                                        ^
+                                              []
+common/header/data_types.hpp:109:15: note: allocated with 'new[]' here
+                                        T* h_f = new T[N];
+                                                 ^
+common/header/data_types.hpp:165:7: warning: 'delete' applied to a pointer that was allocated with 'new[]'; did you mean 'delete[]'? [-Wmismatched-new-delete]
+                                                delete h_f;
+                                                ^
+                                                      []
+common/header/data_types.hpp:145:16: note: allocated with 'new[]' here
+                                                T* h_f = new T[N];
+                                                         ^
+common/header/data_types.hpp:180:26: warning: 'hc' attribute ignored when parsing type [-Wignored-attributes]
+                        typedef gup_data_type<__constant__ float_t> const_gpu_float_array;
+                                              ^~~~~~~~~~~~
+/opt/rocm-3.1.0/include/hip/hcc_detail/host_defines.h:63:37: note: expanded from macro '__constant__'
+#define __constant__ __attribute__((hc))
+                                    ^~
+sys/src/conv.cpp:54:24: error: no matching function for call to 'hipdnnSetFilter4dDescriptor'
+            checkCUDNN(hipdnnSetFilter4dDescriptor(kernel_descriptor,
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+common/header/macros.hpp:16:30: note: expanded from macro 'checkCUDNN'
+    hipdnnStatus_t status = (expression);                     \
+                             ^~~~~~~~~~
+/opt/rocm/hipdnn/include/hipDNN.h:552:1: note: candidate function not viable: no known conversion from 'hipdnnDataType_t' to 'hipdnnTensorFormat_t' for 2nd argument
+hipdnnSetFilter4dDescriptor( hipdnnFilterDescriptor_t filterDesc,
+^
+sys/src/conv.cpp:117:66: error: use of undeclared identifier 'HIPDNN_TENSOR_OP_MATH_ALLOW_CONVERSION'
+            hipdnnSetConvolutionMathType(convolution_descriptor, HIPDNN_TENSOR_OP_MATH_ALLOW_CONVERSION);
+                                                                 ^
+3 warnings and 2 errors generated.
+3 warnings and 1 error generated.
+Makefile:41: recipe for target 'sys/obj/conv_grad.o' failed
+make: *** [sys/obj/conv_grad.o] Error 1
+Makefile:41: recipe for target 'sys/obj/dense.o' failed
+make: *** [sys/obj/dense.o] Error 1
+4 warnings and 7 errors generated.
+Makefile:38: recipe for target 'waveglow/obj/upsample.o' failed
+make: *** [waveglow/obj/upsample.o] Error 1
+3 warnings and 2 errors generated.
+Makefile:41: recipe for target 'sys/obj/conv.o' failed
+make: *** [sys/obj/conv.o] Error 1

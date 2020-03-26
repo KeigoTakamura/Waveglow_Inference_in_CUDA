@@ -2,7 +2,7 @@
 #define __UTILS_HPP__
 
 #pragma once
-
+#include <hip/hip_runtime.h>
 /*
  This providea an inteface for logging primitive variables, objects etc into json format.
 **/

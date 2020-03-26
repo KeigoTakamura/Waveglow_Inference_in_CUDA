@@ -6,7 +6,7 @@
 #include<memory>
 #include<macros.hpp>
 #include<cnpy.hpp>
-
+#include <hip/hip_runtime.h>
 namespace livai
 {
 	namespace tts
@@ -46,7 +46,7 @@ namespace livai
 
 
 					capacity = size();
-					cudaMalloc(&ptr, capacity*sizeof(T));
+					hipMalloc(&ptr, capacity*sizeof(T));
 				}
 
 				void init(size_t dim1, size_t dim2=1, size_t dim3=1, size_t dim4 = 1)
@@ -62,12 +62,12 @@ namespace livai
 
 				inline void reset(size_t beginIndex = 0)
 				{
-					cudaMemset(ptr+beginIndex, 0, (capacity-beginIndex)*sizeof(T));
+					hipMemset(ptr+beginIndex, 0, (capacity-beginIndex)*sizeof(T));
 				}
 
 				inline void copy(const T* src, size_t size)
 				{
-					cudaMemcpy(ptr, src, size*sizeof(T), cudaMemcpyHostToDevice);
+					hipMemcpy(ptr, src, size*sizeof(T), hipMemcpyHostToDevice);
 				}
 
 				inline size_t dim(size_t index) const
@@ -107,7 +107,7 @@ namespace livai
 
 					size_t N = shape[0] * shape[1] * shape[2] * shape[3];
 					T* h_f = new T[N];
-					cudaMemcpy(h_f, ptr, N*sizeof(T), cudaMemcpyDeviceToHost);  // what if this fails...
+					hipMemcpy(h_f, ptr, N*sizeof(T), hipMemcpyDeviceToHost);  // what if this fails...
 					std::vector<size_t> tempShape;
 					for(int i=0;i<shape.size();++i)
 					{
@@ -144,7 +144,7 @@ namespace livai
 						size_t N = totalRows * dataPerRow;
 						T* h_f = new T[N];
 						T* ptrBegin = ptr + rowFrom*dataPerRow;
-						cudaMemcpy(h_f, ptrBegin, N*sizeof(T), cudaMemcpyDeviceToHost);  // what if this fails...
+						hipMemcpy(h_f, ptrBegin, N*sizeof(T), hipMemcpyDeviceToHost);  // what if this fails...
 						for(size_t i=0;i<N;++i)
 						{
 							if(i % dataPerRow == 0)
@@ -170,7 +170,7 @@ namespace livai
 
 				~gup_data_type()
 				{
-					cudaFree(ptr);
+					hipFree(ptr);
 				}
 			};
 
@@ -185,4 +185,3 @@ namespace livai
 }
 
 #endif
-

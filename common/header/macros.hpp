@@ -2,7 +2,7 @@
 #define __MACROS_HPP__
 
 #include <string>
-
+#include <hip/hip_runtime.h>
 #pragma once
 
 #define noCopy(class_name) class_name(const class_name&) = delete;\
@@ -13,32 +13,32 @@
 
 #define checkCUDNN(expression)                               \
   {                                                          \
-    cudnnStatus_t status = (expression);                     \
-    if (status != CUDNN_STATUS_SUCCESS) {                    \
+    hipdnnStatus_t status = (expression);                     \
+    if (status != HIPDNN_STATUS_SUCCESS) {                    \
       std::cerr << "Error on file : line "                   \
                 << __FILE__ << ": "                          \
                 << __LINE__ << ": "                          \
-                << cudnnGetErrorString(status) << std::endl; \
+                << hipdnnGetErrorString(status) << std::endl; \
       std::exit(EXIT_FAILURE);                               \
     }                                                        \
   }
 
   #define checkCUDAERROR(expression)                               \
   {                                                          \
-    cudaError_t status = (expression);                     \
-    if (status != cudaSuccess) {                    \
+    hipError_t status = (expression);                     \
+    if (status != hipSuccess) {                    \
       std::cerr << "Error on file : line "                   \
                 << __FILE__ << ": "                          \
                 << __LINE__ << ": "                       \
-                << cudaGetErrorString(status) << std::endl; \
+                << hipGetErrorString(status) << std::endl; \
       std::exit(EXIT_FAILURE);                               \
     }                                                        \
   }
 
   #define checkCUBLAS(expression)                               \
   {                                                          \
-    cublasStatus_t status = (expression);                     \
-    if (status != CUBLAS_STATUS_SUCCESS) {                    \
+    hipblasStatus_t status = (expression);                     \
+    if (status != HIPBLAS_STATUS_SUCCESS) {                    \
       std::cerr << "Error on file : line "                   \
                 << __FILE__ << ": "                          \
                 << __LINE__ << ": "         \
@@ -49,8 +49,8 @@
 
   #define checkCURAND(expression)                               \
   {                                                          \
-    curandStatus_t status = (expression);                     \
-    if (status != CURAND_STATUS_SUCCESS) {                    \
+    hiprandStatus_t status = (expression);                     \
+    if (status != HIPRAND_STATUS_SUCCESS) {                    \
       std::cerr << "Error on file : line "                   \
                 << __FILE__ << ": "                          \
                 << __LINE__ << ": "         \

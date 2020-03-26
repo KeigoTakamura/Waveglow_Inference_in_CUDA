@@ -2,8 +2,8 @@
 #define __DROPOUT_HPP__
 
 #include <data_types.hpp>
-#include <cudnn.h>
-#include <curand.h>
+#include <hipDNN.h>
+#include <hiprand.h>
 
 
 namespace livai {
@@ -16,7 +16,7 @@ namespace livai {
 			class dropout
 			{
 			private:
-				curandGenerator_t rng;
+				hiprandGenerator_t rng;
 				gpu_float_array d_data;  // this is to keep the randomly generated floats
 
 				dim3 blockDim;

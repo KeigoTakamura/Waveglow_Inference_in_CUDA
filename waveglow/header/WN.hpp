@@ -7,8 +7,8 @@
 #include<conv.hpp>
 #include<hparams.hpp>
 #include<dense.hpp>
-#include <curand.h>
-
+#include <hiprand.h>
+#include <hip/hip_runtime.h>
 
 namespace livai
 {
@@ -24,9 +24,9 @@ namespace livai
 				sys::conv cond_conv[12][8]; 
 				sys::conv res_skip_conv[12][8]; 
 				
-				curandGenerator_t rng;
+				hiprandGenerator_t rng;
 
-				cudnnTensorDescriptor_t input_desc, out_desc;
+				hipdnnTensorDescriptor_t input_desc, out_desc;
 				
 				size_t input_len, dil_t, num_values, n_threads, num_blocks;
 				size_t n_channels, n_flows, n_layers, n_groups, n_rem_channels;
@@ -35,8 +35,8 @@ namespace livai
 			public:
 				noCopy(WN);
 				WN(){}
-				void operator () (cudnnHandle_t& cudnn, gpu_float_array& mel_input, gpu_float_array& d_output, gpu_float_array& d_workspace);
-			 	void set(cudnnHandle_t& cudnn, size_t totalNum);
+				void operator () (hipdnnHandle_t& cudnn, gpu_float_array& mel_input, gpu_float_array& d_output, gpu_float_array& d_workspace);
+			 	void set(hipdnnHandle_t& cudnn, size_t totalNum);
 				~WN(); 
 			};
 		}
@@ -44,4 +44,4 @@ namespace livai
 }
 
 
-#endif
+#endif(base)

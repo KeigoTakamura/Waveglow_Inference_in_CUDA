@@ -11,7 +11,7 @@
 #include<vector>
 #include<string>
 #include<iostream>
-
+#include <hip/hip_runtime.h>
 #ifdef DEBUG
     #define log_d(name, val) livai::tts::common::log(name, val)
 #else
