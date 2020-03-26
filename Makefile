@@ -9,13 +9,13 @@ OBJ_DIR   = waveglow/obj
 OBJ_DIR_SYS   = sys/obj
 OBJ_DIR_COMMON   = common/obj
 
-INCLUDES:=-Iwaveglow/header/ -Icommon/header -Isys/header  -I/opt/rocm-3.1.0/include/ -I/opt/rocm/hipdnn/include  #-I/usr/local/cuda/include
+INCLUDES:=-Iwaveglow/header/ -Icommon/header -Isys/header  -I/opt/rocm-3.1.0/include/ -I/opt/rocm/hipdnn/include -I/opt/rocm/hiprand/include -I/opt/rocm-3.1.0/rocrand/include #-I/usr/local/cuda/include
 
 NVCC:=hipcc
 LDFLAGS:=   -lcudnn -lcublas -lcurand 
 NVCCFLAGS:=  -std=c++11   #-amdgpu-target=gfx906 #--compiler-bindir=g++-4.9 #--ptxas-options=-v -arch=sm_70
 CUDNN_PATH:= /usr/local/cuda/
-LIBS:= -L $(CUDNN_PATH)/lib64 -L/usr/local/lib  -L/opt/rocm-3.1.0/lib/  -L/opt/rocm/lib   -L/opt/rocm/hipdnn/lib
+LIBS:= -L $(CUDNN_PATH)/lib64 -L/usr/local/lib  -L/opt/rocm-3.1.0/lib/  -L/opt/rocm/lib   -L/opt/rocm/hipdnn/lib -L/opt/rocm-3.1.0/rocrand/lib -L/opt/rocm/hipdnn/lib
 #-L/opt/rocm-3.1.0/hsa/lib/ 
 
 
